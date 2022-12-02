@@ -1,0 +1,28 @@
+#include "allocator.hpp"
+
+void
+Allocator::makeAllocator(size_t maxSize)
+{
+	delete[] data;
+	offset = 0;
+	max_size = maxSize;
+	char *data = new char[maxSize]; 
+}
+
+char*
+Allocator::alloc(size_t size)
+{
+   if (offset + size > max_size) {
+	return nullptr;
+   }
+   else {
+	return data[offset + size];
+   }
+  
+}
+
+void
+Allocator::reset()
+{
+   offset = 0;
+}
