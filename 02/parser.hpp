@@ -8,7 +8,6 @@ private:
     std::string (*LetterTokenCallback)(std::string) = nullptr;
     std::string (*StartCallback)(std::string) = nullptr;
     std::string (*EndCallback)(std::string) = nullptr;
-    std::string (*Callback)(std::string) = nullptr;
 
 public:
 	TokenParser() = default;

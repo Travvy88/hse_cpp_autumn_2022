@@ -1,24 +1,23 @@
 #include "parser.hpp"
+#include <iostream>
 
+using digit_func = uint64_t (*)(uint64_t i);
+using letter_func = std::string (*)(std::string str);
 
-void TokenParser::SetDigitTokenCallback(uint64_t (*func)(uint64_t i)) {
+void TokenParser::SetDigitTokenCallback(digit_func func) {
     DigitTokenCallback = func;
 }
 
-void TokenParser::TokenParser::SetLetterTokenCallback(std::string (*func)(std::string str)) {
+void TokenParser::TokenParser::SetLetterTokenCallback(letter_func func) {
     LetterTokenCallback = func;
 }
 
-void TokenParser::SetStartCallback(std::string (*func)(std::string str)) {
+void TokenParser::SetStartCallback(letter_func func) {
 	StartCallback = func;
 }
 
-void TokenParser::SetEndCallback(std::string (*func)(std::string str)) {
+void TokenParser::SetEndCallback(letter_func func) {
     EndCallback = func;
-}
-
-void TokenParser::SetCallback(std::string (*func)(std::string str)) {
-    Callback = func;
 }
 
 uint64_t TokenParser::convert(std::string str) {
@@ -43,9 +42,7 @@ std::string TokenParser::Parse(const std::string & str)
         std::string word = "";
         work_str += " ";
         for (auto ch : work_str) {
-            if (ch == ' ' || ch == '\t' || ch == '\n') {
-                if (Callback != nullptr) // token callback
-                    word = Callback(word);
+            if ((ch == ' ' || ch == '\t' || ch == '\n') && word.length() > 0) {
                 if (isDigit(word) and DigitTokenCallback != nullptr) { // only for digits token
                     try{ // try to fetch into uint64_t size
                         uint64_t word_num = std::stoul(word);
@@ -61,12 +58,15 @@ std::string TokenParser::Parse(const std::string & str)
                     word = LetterTokenCallback(word);
                 new_str = new_str + " " + word;
                 word = "";
-            }  else {
+            }  else if (ch != ' '){
                 word = word + ch;
             }
         }
     new_str = new_str + " " + word;
     if (EndCallback != nullptr)
         new_str = EndCallback(new_str); // callback to result string after parsing
+
+    if (new_str == " ")
+            return str;
     return new_str;
     }

@@ -1,5 +1,5 @@
 CC=g++-10
-FLAGS=-std=c++20 -Wall -pedantic -Wextra
+FLAGS=-std=c++20 -g -Wall -pedantic -Wextra
 TEST_LIB=-lgtest -lgtest_main -lpthread
 
 all: parser test_bin test
