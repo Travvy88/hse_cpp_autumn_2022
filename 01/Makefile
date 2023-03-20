@@ -1,8 +1,8 @@
 CC=g++-10
-FLAGS=-std=c++20 -Wall -pedantic -Wextra
+FLAGS=-std=c++20
 TEST_LIB=-lgtest -lgtest_main -lpthread
 
-all: allocator test_bin
+all: allocator test_bin test
 
 allocator: allocator.cpp allocator.hpp
 	$(CC) $(FLAGS) -c allocator.cpp -o allocator

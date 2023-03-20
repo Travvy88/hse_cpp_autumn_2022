@@ -6,8 +6,9 @@ class Allocator
 {
 public:
     char *data = nullptr;
-    size_t offset;
+    char *offset;
     size_t max_size;
+    size_t allocated_size;
 
     void makeAllocator(size_t maxSize);
     char* alloc(size_t size);

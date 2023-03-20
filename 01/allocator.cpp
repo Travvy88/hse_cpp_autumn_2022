@@ -3,32 +3,34 @@
 
 void
 Allocator::makeAllocator(size_t maxSize)
-{	
-	if (data == nullptr){
-		delete[] data;
-	}
-	offset = 0;
+{
+    delete[] data;
+    allocated_size = 0;
 	max_size = maxSize;
-	char *data = new char[maxSize]; 
+	char *data = new char[maxSize];
+    char *offset = data;
 }
 
 char*
 Allocator::alloc(size_t size)
 {
-   if (offset + size > max_size) {
-	return nullptr;
-   }
-   else {
-	offset  = offset + size;
-	return data + offset;
-   }
-  
+    char *to_return;
+    if (allocated_size + size <= max_size) {
+       to_return = offset;
+       offset += size;
+       allocated_size += size;
+       return to_return;
+    }
+    else {
+        return nullptr;
+    }
 }
 
 void
 Allocator::reset()
 {
-   offset = 0;
+   offset = data;
+   allocated_size = 0;
 }
 
 Allocator::~Allocator() 
