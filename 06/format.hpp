@@ -2,7 +2,6 @@
 #include <string>
 #include <sstream>
 
-#pragma once
 
 struct Error
 {
@@ -52,14 +51,14 @@ void change_arg(std::string &s, uint32_t k, uint32_t num_of_args, T&& arg)
 		std::string substr = s.substr(start + 1, finish - start - 1);
 		if (isNumber(substr) == false) 
 			throw Error("Wrong index in brackets:", substr, __FILE__, __LINE__);
-		if (std::stoi(substr) == k)
+		if (std::stoul(substr) == k)
 		{
 			std::stringstream ss;
 			ss << arg;
 			s.erase(start, finish - start + 1);
 			s.insert(start, ss.str());
 		}
-		 if (std::stoi(substr) >= num_of_args || std::stoi(substr) < 0)
+		 if (std::stoul(substr) >= num_of_args || std::stoi(substr) < 0)
             throw Error("Index must be in [0, num of formatting arguments], got:", std::to_string(k), __FILE__, __LINE__);
     }
 }
