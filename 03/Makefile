@@ -4,7 +4,7 @@ TEST_LIB=-lgtest -lgtest_main -lpthread
 
 all: matrix test_bin test clean
 
-matrix: matrix.cpp 
+matrix: matrix.h
 	$(CC) $(FLAGS) -c matrix.cpp -o matrix.o
 
 test_bin: matrix.o tests.o

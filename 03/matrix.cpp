@@ -1,99 +1,83 @@
 #include <iostream>
+#include "matrix.h"
 
 
-class Matrix
+void Matrix::ProxyRow::initialize(size_t cols)
 {
-    class ProxyRow
-    {
-    private:
-        int32_t *data_;
-    public:
-        size_t cols;
+    data_ = new int32_t [cols];
+    this->cols = cols;
+}
 
-        ProxyRow(){};
-        ProxyRow(size_t cols)
-        {
-            data_ = new int32_t [cols];
-            this->cols = cols;
-        }
+int32_t& Matrix::ProxyRow::operator[](size_t j)
+{
+    if (j >= cols)
+        throw std::out_of_range("Columns index out of range");
+    return data_[j];
+}
 
-        int32_t& operator[](size_t j)
-        {
-            return data_[j];
-        }
-    };
+Matrix::~Matrix()
+{
+    delete rows_;
+}
 
+Matrix::Matrix(size_t rows, size_t cols)
+{
+    rows_ = new Matrix::ProxyRow[rows];
+    for (size_t i=0; i < rows; i++)
+        rows_[i].initialize(cols);
+    this->rows = rows;
+}
 
-public:
-    ~Matrix()
-    {
-        delete rows_;
-    }
+size_t Matrix::getRows() const
+{
+    return this->rows;
+}
 
-    Matrix(){}
-    Matrix(size_t rows, size_t cols)
-    {
-        rows_ = new ProxyRow[rows];
-        for (size_t i=0; i < rows; i++)
-            rows_[i] = ProxyRow(cols);
-        this->rows = rows;
-    }
+size_t Matrix::getCols() const
+{
+    return this->rows_[0].cols;
+}
 
-    size_t getRows() const
-    {
-        return this->rows;
-    }
+Matrix::ProxyRow& Matrix::operator[](size_t i) const
+{
+    if (i >= rows)
+        throw std::out_of_range("Rows index out of range");
+    return rows_[i];
+}
 
-    size_t getCols() const
-    {
-        return this->rows_[0].cols;
-    }
+Matrix&  Matrix::operator*=(int32_t x)
+{
+    for (size_t i = 0; i < getRows(); i++)
+        for (size_t j = 0; j < getCols(); j++)
+            (*this)[i][j] *= x;// * x;
+    return *this;
+}
 
-    ProxyRow& operator[](size_t i) const
-    {
-        return rows_[i];
-    }
+Matrix Matrix::operator+(const Matrix& m) const
+{
+    if (this->getCols() != m.getCols() or this->getRows() != m.getRows())
+        throw std::out_of_range("matricies shapes are not equal");
 
-    Matrix&  operator*=(int32_t x)
-    {
-        for (size_t i = 0; i < getRows(); i++)
-            for (size_t j = 0; j < getCols(); j++)
-                (*this)[i][j] *= x;// * x;
-        return *this;
-    }
+    Matrix result(m.getRows(), m.getCols());
+     for (size_t i = 0; i < getRows(); i++)
+        for (size_t j = 0; j < getCols(); j++)
+            result[i][j] = (*this)[i][j] + m[i][j];
 
-    friend std::ostream& operator<<(std::ostream &out, const Matrix& m);
+    return result;
+}
 
-    Matrix operator+(const Matrix& m) const
-    {
-        if (this->getCols() != m.getCols() and this->getRows() != m.getRows())
-            throw std::out_of_range("matricies shapes are not equal");
+bool Matrix::operator==(const Matrix& m)
+{
+     if (this->getCols() != m.getCols() and this->getRows() != m.getRows())
+        throw std::out_of_range("matricies shapes are not equal");
+    for (size_t i = 0; i < getRows(); i++)
+        for (size_t j = 0; j < getCols(); j++)
+            if ((*this)[i][j] != m[i][j])
+                return false;
 
-        Matrix result(m.getRows(), m.getCols());
-         for (size_t i = 0; i < getRows(); i++)
-            for (size_t j = 0; j < getCols(); j++)
-                result[i][j] = (*this)[i][j] + m[i][j];
+    return true;
+}
 
-        return result;
-    }
-
-    bool operator==(const Matrix& m)
-    {
-         if (this->getCols() != m.getCols() and this->getRows() != m.getRows())
-            throw std::out_of_range("matricies shapes are not equal");
-        for (size_t i = 0; i < getRows(); i++)
-            for (size_t j = 0; j < getCols(); j++)
-                if ((*this)[i][j] != m[i][j])
-                    return false;
-
-        return true;
-    }
-
-private:
-    size_t rows;
-    ProxyRow *rows_;
-};
-/*
 std::ostream& operator<<(std::ostream &out, const Matrix& m)
     {
         for (size_t i = 0; i < m.getRows(); i++)
@@ -106,4 +90,4 @@ std::ostream& operator<<(std::ostream &out, const Matrix& m)
         }
     return out;
     }
-*/
+
