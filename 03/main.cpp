@@ -84,9 +84,9 @@ public:
 		for (size_t i = 0; i < getRows(); i++)
             for (size_t j = 0; j < getCols(); j++)
 				if ((*this)[i][j] != m[i][j])
-					return false
+					return false;
 
-		return true
+		return true;
 	}
 
 private:
@@ -134,9 +134,5 @@ int main()
 	
 	auto x = n + m;
 	std::cout << x << std::endl;
-	
-	
-
-
 }
 

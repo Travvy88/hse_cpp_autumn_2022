@@ -1,10 +1,10 @@
 CC=g++-10
-FLAGS=-std=c++20 -Wall -pedantic -Wextra
+FLAGS=-std=c++20 #-Wall -pedantic -Wextra
 TEST_LIB=-lgtest -lgtest_main -lpthread
 
-all: compile
+all: compile run_tests clean
 
-compile: serializer.hpp deserializer.hpp error.h
+compile: serializer.hpp deserializer.hpp error.hpp
 	$(CC) $(FLAGS) tests.cpp -o test_bin $(TEST_LIB)
 
 run_tests:

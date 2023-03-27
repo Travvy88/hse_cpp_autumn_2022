@@ -1,4 +1,4 @@
-#include "error.h"
+#include "error.hpp"
 #pragma once
 
 class Serializer
@@ -22,6 +22,7 @@ public:
         return process(args...);
     }
 
+private:
     template <class T, class... Args>
     Error process(const T& value, const Args&... args)
     {
@@ -31,7 +32,7 @@ public:
 
     Error process(const bool &arg)
     {
-        if (arg == true)
+        if (arg)
             out_ << "true" << Separator;
         else
             out_ << "false" << Separator;
@@ -44,7 +45,7 @@ public:
         out_ << arg << Separator;
         return Error::NoError;
     }
-private:
+
     std::ostream& out_;
     // process использует variadic templates
 };

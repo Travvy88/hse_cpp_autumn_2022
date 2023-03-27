@@ -22,6 +22,7 @@ public:
         return process(args...);
     }
 
+private:
     template <class T, class... Args>
     Error process( T& value, Args&... args)
     {
@@ -36,9 +37,9 @@ public:
         std::string text;
         in_ >> text;
 
-        if (text == "true")
+        if (text == "true" or text=="1")
             value = true;
-        else if (text == "false")
+        else if (text == "false" or text=="0")
             value = false;
         else
             return Error::CorruptedArchive;
@@ -52,18 +53,24 @@ public:
         in_ >> temp;
 		if (!isNumber(temp))
 			return Error::CorruptedArchive;
-		arg = stoi(temp);
+        try {
+            arg = stoull(temp);
+        }
+        catch(...) {
+            return Error::CorruptedArchive;
+        }
         return Error::NoError;
     }
-bool isNumber(const std::string& s)
-{
-    for (char const &ch : s) {
-        if (std::isdigit(ch) == 0)
-            return false;
+
+    static bool isNumber(const std::string& s)
+    {
+        for (char const &ch : s) {
+            if (std::isdigit(ch) == 0)
+                return false;
+        }
+        return true;
     }
-    return true;
-}
-private:
+
     std::istream& in_;
     // process использует variadic templates
 };
