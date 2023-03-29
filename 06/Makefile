@@ -2,7 +2,7 @@ CC=g++-10
 FLAGS=-std=c++20 -Wall -pedantic -Wextra -g
 TEST_LIB=-lgtest -lgtest_main -lpthread
 
-all: program tests
+all: program
 
 tests.o: format.hpp
 	$(CC) $(FLAGS) -c tests.cpp
@@ -10,7 +10,7 @@ tests.o: format.hpp
 program: format.hpp tests.o
 	$(CC)  $(FLAGS) tests.o format.hpp -o test_bin $(TEST_LIB)
 
-tests:
+test:
 	./test_bin
 
 clean:
