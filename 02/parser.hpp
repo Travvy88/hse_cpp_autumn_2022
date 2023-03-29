@@ -1,6 +1,8 @@
 #include <string>
 #pragma once
 
+using digit_func = uint64_t (*)(uint64_t i);
+using letter_func = std::string (*)(std::string str);
 
 class TokenParser {
 private:
@@ -11,11 +13,10 @@ private:
 
 public:
 	TokenParser() = default;
-	void SetDigitTokenCallback(uint64_t (*func)(uint64_t));
-	void SetLetterTokenCallback(std::string (*func)(std::string));
-	void SetStartCallback(std::string (*func)(std::string));
-	void SetEndCallback(std::string (*func)(std::string));
-	void SetCallback(std::string (*func)(std::string));
+	void SetDigitTokenCallback(digit_func);
+	void SetLetterTokenCallback(letter_func);
+	void SetStartCallback(letter_func);
+	void SetEndCallback(letter_func);
 	 
 	uint64_t convert(std::string);
 	bool isDigit(std::string);

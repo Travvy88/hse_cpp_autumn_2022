@@ -1,8 +1,7 @@
 #include "parser.hpp"
 #include <iostream>
 
-using digit_func = uint64_t (*)(uint64_t i);
-using letter_func = std::string (*)(std::string str);
+
 
 void TokenParser::SetDigitTokenCallback(digit_func func) {
     DigitTokenCallback = func;
